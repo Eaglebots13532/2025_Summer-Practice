@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Config
@@ -17,7 +18,8 @@ public class Motor_Basics extends LinearOpMode {
 
   DcMotorEx LMotor, RMotor;
 
-  public static double power = 0;
+  public static double LPower = 0, RPower = 0;
+
 
   @Override
   public void runOpMode() {
@@ -27,17 +29,24 @@ public class Motor_Basics extends LinearOpMode {
     LMotor = hardwareMap.get(DcMotorEx.class, "BLMotor");
     RMotor = hardwareMap.get(DcMotorEx.class, "BRMotor");
 
+    LMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    RMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     LMotor.setDirection(REVERSE);
 
 
     waitForStart();
     while (opModeIsActive()) {
 
+      LPower = -gamepad1.left_stick_y;
+      RPower = -gamepad1.right_stick_y;
+
+
       telemetry.addData("AddData", LMotor.getVelocity());
       telemetry.update();
 
-      RMotor.setPower(power);
-      LMotor.setPower(power);
+      RMotor.setPower(RPower);
+      LMotor.setPower(LPower);
 
       telemetry.update();
 
